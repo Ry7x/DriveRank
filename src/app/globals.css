@@ -1,0 +1,116 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 15% 4%;
+    --foreground: 0 0% 98%;
+    --card: 210 15% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 210 15% 6%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 187 88% 63%;
+    --secondary-foreground: 210 15% 10%;
+    --muted: 210 15% 12%;
+    --muted-foreground: 210 10% 65%;
+    --accent: 187 88% 63%;
+    --accent-foreground: 210 15% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 15% 12%;
+    --input: 210 15% 12%;
+    --ring: 0 72% 51%;
+    --radius: 1.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overscroll-behavior-y: none;
+    overflow-x: hidden;
+    width: 100vw;
+    position: fixed;
+    height: 100%;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-card/70 backdrop-blur-2xl border border-white/5 shadow-2xl;
+  }
+  .glass-card {
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+  .neon-aqua {
+    box-shadow: 0 0 20px rgba(77, 224, 244, 0.4), 0 0 40px rgba(77, 224, 244, 0.2);
+  }
+  .neon-red {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4), 0 0 40px rgba(239, 68, 68, 0.2);
+  }
+  .sporty-gradient {
+    background: linear-gradient(135deg, rgba(77, 224, 244, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 5.5rem);
+  }
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .app-container {
+    @apply mx-auto max-w-md w-full h-full relative flex flex-col bg-background overflow-hidden;
+  }
+  .animate-pulse-aqua {
+    animation: pulse-aqua 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  .animate-pulse-red {
+    animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@keyframes pulse-aqua {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+@keyframes loading-progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-scan {
+  animation: scan 4s linear infinite;
+}
+
+.animate-loading-progress {
+  animation: loading-progress 2s linear infinite;
+}
