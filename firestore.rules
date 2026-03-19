@@ -1,0 +1,47 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Rekordet publike të garave (Ranking)
+    match /public_runs/{runId} {
+      allow get, list: if true; // Lejojmë leximin publik për ranking
+      allow create: if signedIn() && request.auth.uid == request.resource.data.userId;
+      allow update, delete: if signedIn() && request.auth.uid == resource.data.userId;
+    }
+
+    // Profilet e përdoruesve dhe garat e tyre
+    match /users/{userId} {
+      // Lejojmë leximin publik për profilet pasi është aplikacion ranking
+      // Kjo zgjidh edhe gabimin "Missing permissions" gjatë refresh-it
+      allow read: if true; 
+      allow write: if isOwner(userId);
+
+      match /runs/{runId} {
+        allow get, list: if true; // Lejojmë leximin publik për telemetrinë e vrapimeve
+        allow create: if isOwner(userId);
+        allow update, delete: if isOwner(userId);
+      }
+    }
+
+    // Raportet e komunitetit për radarë
+    match /radar_reports/{reportId} {
+      allow get, list: if true; // Lejojmë të gjithëve t'i shohin radarët për siguri në rrugë
+      allow create: if signedIn();
+      allow update: if signedIn() && resource.data.userId == request.auth.uid;
+      // Lejojmë fshirjen për çdo përdorues të kyçur për të mundësuar pastrimin e komunitetit
+      allow delete: if signedIn();
+    }
+    
+    // Versioni i rregullave: 21.2 - Public Read for User Profiles (Fix for Auth race condition)
+  }
+}
