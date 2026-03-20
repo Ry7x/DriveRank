@@ -1,0 +1,11 @@
+{
+  "[project]/src/components/map/DriveRankMap.tsx [app-client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/src/components/map/DriveRankMap.tsx [app-client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_a6aa7e65._.js",
+      "static/chunks/src_components_map_DriveRankMap_tsx_75607d96._.js",
+      "static/chunks/node_modules_leaflet_dist_leaflet_ef5f0413.css",
+      "static/chunks/src_components_map_DriveRankMap_tsx_92ba0e9a._.js"
+    ]
+  }
+}

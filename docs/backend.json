@@ -1,0 +1,242 @@
+
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user's profile information in the DriveRank Kosovo application. Stores personal details and preferences.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "username": {
+          "type": "string",
+          "description": "The user's chosen display name, unique across the platform."
+        },
+        "city": {
+          "type": "string",
+          "description": "The city where the user is located."
+        },
+<<<<<<< HEAD
+=======
+        "community": {
+          "type": "string",
+          "description": "The automotive community the user belongs to (e.g., Marakli t'kerreve, Speedomaniaks)."
+        },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
+        "carBrand": {
+          "type": "string",
+          "description": "The brand of the user's primary or favorite car."
+        },
+        "carModel": {
+          "type": "string",
+          "description": "The model of the user's primary or favorite car."
+        },
+        "carColor": {
+          "type": "string",
+          "description": "The color of the user's primary or favorite car."
+        },
+        "horsepower": {
+          "type": "number",
+          "description": "The horsepower of the user's primary or favorite car."
+        },
+        "modifications": {
+          "type": "string",
+          "description": "A description of modifications made to the user's primary or favorite car."
+        },
+        "profilePhotoUrl": {
+          "type": "string",
+          "description": "URL to the user's profile photo.",
+          "format": "uri"
+        },
+        "profileIcon": {
+          "type": "string",
+          "description": "Identifier for the selected automotive profile icon (e.g., 'turbo', 'speedometer', 'crown', 'lightning', 'shield', 'flame')",
+          "enum": ["turbo", "speedometer", "crown", "lightning", "shield", "flame"]
+        },
+        "coverPhotoUrl": {
+          "type": "string",
+          "description": "URL to the user's cover photo.",
+          "format": "uri"
+        },
+        "followedUserIds": {
+          "type": "array",
+          "description": "An array of UserProfile IDs that this user is following.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isPremium": {
+          "type": "boolean",
+          "description": "Indicates if the user has a premium subscription."
+        },
+<<<<<<< HEAD
+=======
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Indicates if the user is a system administrator."
+        },
+        "onboardingCompleted": {
+          "type": "boolean",
+          "description": "Indicates if the user has completed the onboarding flow."
+        },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "city",
+<<<<<<< HEAD
+=======
+        "community",
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
+        "carBrand",
+        "carModel",
+        "isPremium",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CarProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CarProfile",
+      "type": "object",
+      "description": "Represents a specific car owned or managed by a user.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "brand": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "horsepower": {
+          "type": "number"
+        },
+        "drivetrain": {
+          "type": "string"
+        },
+        "modifications": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "userId", "brand", "model", "horsepower", "drivetrain", "modifications", "createdAt", "updatedAt"]
+    },
+    "TelemetryPoint": {
+      "type": "object",
+      "properties": {
+        "time": { "type": "number", "description": "Seconds from start." },
+        "speed": { "type": "number", "description": "KM/H at this point." },
+        "distance": { "type": "number", "description": "Meters from start." }
+      }
+    },
+    "PerformanceRun": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PerformanceRun",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+<<<<<<< HEAD
+        "profileIcon": { "type": "string" },
+        "carProfileId": { "type": "string" },
+        "city": { "type": "string" },
+        "runType": { "type": "string", "enum": ["Top Speed", "0-100", "100-200", "1/4 Mile"] },
+        "peakSpeedKmH": { "type": "number" },
+        "distanceMeters": { "type": "number" },
+        "durationSeconds": { "type": "number" },
+        "dragTime": { "type": "number", "description": "The specific time achieved for drag runs (0-100, 100-200, 1/4 mile)" },
+=======
+        "community": { "type": "string" },
+        "profileIcon": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "carBrand": { "type": "string" },
+        "carModel": { "type": "string" },
+        "city": { "type": "string" },
+        "runType": { "type": "string", "enum": ["Top Speed", "0-60", "0-100", "100-200", "1/4 Mile"] },
+        "peakSpeedKmH": { "type": "number" },
+        "distanceMeters": { "type": "number" },
+        "durationSeconds": { "type": "number" },
+        "dragTime": { "type": "number", "description": "The specific time achieved for drag runs (0-60, 0-100, 100-200, 1/4 mile)" },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
+        "telemetry": { 
+          "type": "array", 
+          "items": { "$ref": "#/backend/entities/TelemetryPoint" } 
+        },
+<<<<<<< HEAD
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "carProfileId", "city", "runType", "peakSpeedKmH", "distanceMeters", "durationSeconds", "createdAt"]
+=======
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "city", "runType", "peakSpeedKmH", "distanceMeters", "durationSeconds", "createdAt"]
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
+    }
+  },
+  "auth": {
+    "providers": ["password", "google.com", "apple.com", "anonymous"]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": { "$ref": "#/backend/entities/UserProfile" },
+          "description": "Stores individual user profile information."
+        }
+      },
+      {
+        "path": "/radar_reports/{reportId}",
+        "definition": {
+          "entityName": "RadarReport",
+          "description": "Stores community radar reports."
+        }
+      },
+       {
+        "path": "/public_runs/{runId}",
+        "definition": {
+          "entityName": "PerformanceRun",
+          "description": "Stores public racing records."
+        }
+      }
+    ]
+  }
+}
