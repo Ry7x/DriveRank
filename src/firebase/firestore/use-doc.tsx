@@ -57,7 +57,10 @@ export function useDoc<T = any>(
 
     setIsLoading(true);
     setError(null);
+<<<<<<< HEAD
     // Optional: setData(null); // Clear previous data instantly
+=======
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
 
     const unsubscribe = onSnapshot(
       memoizedDocRef,
@@ -68,6 +71,7 @@ export function useDoc<T = any>(
           // Document does not exist
           setData(null);
         }
+<<<<<<< HEAD
         setError(null); // Clear any previous error on successful snapshot (even if doc doesn't exist)
         setIsLoading(false);
       },
@@ -83,6 +87,32 @@ export function useDoc<T = any>(
 
         // trigger global error propagation
         errorEmitter.emit('permission-error', contextualError);
+=======
+        setError(null); // Clear any previous error on successful snapshot
+        setIsLoading(false);
+      },
+      (err: FirestoreError) => {
+        // Only promote to global listener if it's a security rule error
+        if (err.code === 'permission-denied') {
+          const contextualError = new FirestorePermissionError({
+            operation: 'get',
+            path: memoizedDocRef.path,
+          })
+
+          setError(contextualError)
+          setData(null)
+          setIsLoading(false)
+
+          // trigger global error propagation
+          errorEmitter.emit('permission-error', contextualError);
+        } else {
+          // Handle connection/other errors locally
+          console.warn("Firestore connection issue (handled gracefully):", err.message);
+          setError(err);
+          setData(null);
+          setIsLoading(false);
+        }
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
       }
     );
 

@@ -11,8 +11,23 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+<<<<<<< HEAD
         body: ['Inter', 'sans-serif'],
         headline: ['Inter', 'sans-serif'],
+=======
+        sans: [
+          'var(--font-inter)',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          '"SF Pro Text"',
+          '"Helvetica Neue"',
+          'Arial',
+          'sans-serif',
+        ],
+        body: ['var(--font-inter)', 'sans-serif'],
+        headline: ['var(--font-inter)', 'sans-serif'],
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         code: ['monospace'],
       },
       colors: {
@@ -73,7 +88,11 @@ export default {
         },
         'pulse-glow': {
           '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+<<<<<<< HEAD
           '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+=======
+          '50%': { opacity: '0.85', transform: 'scale(1.01)' },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         },
         'scan': {
           '0%': { transform: 'translateY(-100%)' },
@@ -82,14 +101,28 @@ export default {
         'loading-progress': {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(100%)' }
+<<<<<<< HEAD
+=======
+        },
+        'draw-route': {
+          'from': { stroke_dashoffset: '1000' },
+          'to': { stroke_dashoffset: '0' }
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+<<<<<<< HEAD
         'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'scan': 'scan 8s linear infinite',
         'loading-progress': 'loading-progress 2s linear infinite',
+=======
+        'pulse-glow': 'pulse-glow 8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+        'scan': 'scan 12s linear infinite',
+        'loading-progress': 'loading-progress 4s linear infinite',
+        'draw-route': 'draw-route 6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
       },
     },
   },

@@ -15,7 +15,11 @@ export function LoadingScreen() {
     const timer = setTimeout(() => {
       setFadeOut(true);
       setTimeout(() => setLoading(false), 500); 
+<<<<<<< HEAD
     }, 2200);
+=======
+    }, 1500);
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
 
     return () => clearTimeout(timer);
   }, []);
@@ -29,6 +33,7 @@ export function LoadingScreen() {
         fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
       )}
     >
+<<<<<<< HEAD
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(77,224,244,0.12)_0%,transparent_70%)] pointer-events-none" />
       
       <div className="relative flex flex-col items-center gap-8 w-full max-w-xs">
@@ -70,6 +75,26 @@ export function LoadingScreen() {
         <Loader2 className="w-4 h-4 animate-spin text-accent" />
         <span className="text-[7px] font-black uppercase tracking-[0.3em]">SECURE_SERVER_SYNC</span>
       </div>
+=======
+      <div className="relative flex flex-col items-center gap-6 w-full max-w-xs text-center">
+        <div className="w-20 h-20 bg-zinc-950 border border-white/5 rounded-3xl flex items-center justify-center shadow-2xl relative overflow-hidden">
+          <Gauge className="w-10 h-10 text-accent" />
+          <div className="absolute inset-0 w-full h-1 bg-accent/20 animate-scan" />
+        </div>
+        
+        <div className="space-y-2">
+          <h1 className="text-2xl font-black tracking-tighter uppercase text-white">
+            DriveRank<span className="text-red-600"> Kosova</span>
+          </h1>
+          <div className="w-full h-1 bg-zinc-900 rounded-full overflow-hidden">
+            <div className="h-full bg-accent w-full animate-loading-progress" />
+          </div>
+          <p className="text-[8px] font-bold uppercase tracking-[0.4em] text-muted-foreground">
+            LIDHJA ME SATELITIN...
+          </p>
+        </div>
+      </div>
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
     </div>
   );
 }

@@ -19,6 +19,13 @@
           "type": "string",
           "description": "The city where the user is located."
         },
+<<<<<<< HEAD
+=======
+        "community": {
+          "type": "string",
+          "description": "The automotive community the user belongs to (e.g., Marakli t'kerreve, Speedomaniaks)."
+        },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         "carBrand": {
           "type": "string",
           "description": "The brand of the user's primary or favorite car."
@@ -65,6 +72,17 @@
           "type": "boolean",
           "description": "Indicates if the user has a premium subscription."
         },
+<<<<<<< HEAD
+=======
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Indicates if the user is a system administrator."
+        },
+        "onboardingCompleted": {
+          "type": "boolean",
+          "description": "Indicates if the user has completed the onboarding flow."
+        },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         "createdAt": {
           "type": "string",
           "description": "Timestamp when the user profile was created.",
@@ -80,6 +98,10 @@
         "id",
         "username",
         "city",
+<<<<<<< HEAD
+=======
+        "community",
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         "carBrand",
         "carModel",
         "isPremium",
@@ -141,6 +163,7 @@
         "id": { "type": "string" },
         "userId": { "type": "string" },
         "username": { "type": "string" },
+<<<<<<< HEAD
         "profileIcon": { "type": "string" },
         "carProfileId": { "type": "string" },
         "city": { "type": "string" },
@@ -149,13 +172,42 @@
         "distanceMeters": { "type": "number" },
         "durationSeconds": { "type": "number" },
         "dragTime": { "type": "number", "description": "The specific time achieved for drag runs (0-100, 100-200, 1/4 mile)" },
+=======
+        "community": { "type": "string" },
+        "profileIcon": { "type": "string" },
+        "isAdmin": { "type": "boolean" },
+        "carBrand": { "type": "string" },
+        "carModel": { "type": "string" },
+        "city": { "type": "string" },
+        "runType": { "type": "string", "enum": ["Top Speed", "0-60", "0-100", "100-200", "1/4 Mile"] },
+        "peakSpeedKmH": { "type": "number" },
+        "distanceMeters": { "type": "number" },
+        "durationSeconds": { "type": "number" },
+        "dragTime": { "type": "number", "description": "The specific time achieved for drag runs (0-60, 0-100, 100-200, 1/4 mile)" },
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
         "telemetry": { 
           "type": "array", 
           "items": { "$ref": "#/backend/entities/TelemetryPoint" } 
         },
+<<<<<<< HEAD
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["id", "userId", "carProfileId", "city", "runType", "peakSpeedKmH", "distanceMeters", "durationSeconds", "createdAt"]
+=======
+        "path": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "lat": { "type": "number" },
+              "lng": { "type": "number" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "city", "runType", "peakSpeedKmH", "distanceMeters", "durationSeconds", "createdAt"]
+>>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
     }
   },
   "auth": {
