@@ -1,7 +1,7 @@
 import type {Metadata} from 'next';
 import { Inter } from 'next/font/google';
-import 'leaflet/dist/leaflet.css';
 import './globals.css';
+import 'leaflet/dist/leaflet.css';
 import { Toaster } from "@/components/ui/toaster";
 import { FirebaseClientProvider } from "@/firebase/client-provider";
 import { DrivingProvider } from "@/context/driving-context";
