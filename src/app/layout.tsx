@@ -7,7 +7,7 @@ import { FirebaseClientProvider } from "@/firebase/client-provider";
 import { DrivingProvider } from "@/context/driving-context";
 import { OnboardingWrapper } from "@/components/layout/onboarding-wrapper";
 
-const interFont = Inter({
+const fontInter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sq" className={`dark ${interFont.variable}`} suppressHydrationWarning>
+    <html lang="sq" className={`dark ${fontInter.variable}`} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
       </head>
