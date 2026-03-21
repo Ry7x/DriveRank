@@ -1,4 +1,3 @@
-
 import type {Metadata} from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -8,7 +7,7 @@ import { FirebaseClientProvider } from "@/firebase/client-provider";
 import { DrivingProvider } from "@/context/driving-context";
 import { OnboardingWrapper } from "@/components/layout/onboarding-wrapper";
 
-const inter = Inter({
+const fontInter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
@@ -34,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sq" className={`dark ${inter.variable}`} suppressHydrationWarning>
+    <html lang="sq" className={`dark ${fontInter.variable}`} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
       </head>
@@ -48,8 +47,8 @@ export default function RootLayout({
                 </main>
               </div>
             </OnboardingWrapper>
-            <Toaster />
           </DrivingProvider>
+          <Toaster />
         </FirebaseClientProvider>
       </body>
     </html>

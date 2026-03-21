@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 @import "leaflet/dist/leaflet.css";
 
+=======
+>>>>>>> 8a2235548925ae5db73b9e996195cdfbb76640c3
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -33,7 +36,6 @@
 @layer base {
   * {
     @apply border-border;
-    -webkit-tap-highlight-color: transparent;
   }
   html, body {
     height: 100%;
