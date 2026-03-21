@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
@@ -312,11 +311,12 @@ export default function DashboardPage() {
                 </button>
               </DialogTrigger>
               <DialogContent className="glass border-white/10 rounded-[2.5rem] p-8 max-w-[340px] apple-scale-in">
+                <DialogTitle className="sr-only">Informacion mbi modin Drag</DialogTitle>
                 <div className="flex flex-col items-center gap-6">
                   <div className="w-16 h-16 bg-yellow-500/20 rounded-3xl flex items-center justify-center border border-yellow-500/20">
                     <Zap className="w-8 h-8 text-yellow-500" />
                   </div>
-                  <DialogTitle className="text-xl font-medium text-center">Si funksionon modi Drag?</DialogTitle>
+                  <h2 className="text-xl font-medium text-center">Si funksionon modi Drag?</h2>
                   <div className="space-y-4 w-full">
                     {[
                       { icon: Gauge, t: "Ndalo plotësisht", d: "Makina duhet të jetë në 0 km/h për të nisur garën." },
@@ -428,9 +428,9 @@ export default function DashboardPage() {
                       <div className="mt-4 animate-in fade-in slide-in-from-bottom-3 duration-300">
                         <p className="text-[10px] font-medium text-yellow-500/60 uppercase">Koha {runMode}</p>
                         {isWaitingForLaunch ? (
-                          <p className="text-2xl font-medium text-yellow-500 animate-pulse uppercase">Nisu!</p>
+                          <p className="text-2xl font-bold text-yellow-500 animate-pulse uppercase">Nisu!</p>
                         ) : (
-                          <p className="text-4xl font-medium text-yellow-500">{(dragTime || 0).toFixed(2)}s</p>
+                          <p className="text-4xl font-bold text-yellow-500">{(dragTime || 0).toFixed(2)}s</p>
                         )}
                       </div>
                     )}
@@ -447,7 +447,7 @@ export default function DashboardPage() {
            )}
 
            {isJumpStart && (
-             <Badge className="w-full bg-red-600 text-white font-medium h-10 rounded-xl justify-center uppercase animate-pulse">🔥 Jump Start - Anulohet</Badge>
+             <Badge className="w-full bg-red-600 text-white font-bold h-10 rounded-xl justify-center uppercase animate-pulse">🔥 Jump Start - Anulohet</Badge>
            )}
 
            <div className="flex flex-col gap-3">
@@ -459,18 +459,18 @@ export default function DashboardPage() {
                 }}
                 disabled={isDragModule && speed > 1.5 && !isDriving}
                 className={cn(
-                  "w-full h-20 rounded-[2.2rem] font-medium text-base uppercase transition-all shadow-2xl border-b-4 active:scale-[0.97]",
+                  "w-full h-20 rounded-[2.2rem] font-bold text-base uppercase transition-all shadow-2xl border-b-4 active:scale-[0.97]",
                   isDriving ? "bg-red-600 text-white hover:bg-red-700 border-red-800" : isDragModule ? "bg-yellow-500 text-black hover:bg-yellow-400 border-yellow-700 shadow-yellow-500/30" : "bg-accent text-background hover:bg-accent/90 border-accent/70 shadow-accent/30",
                   isDragModule && speed > 1.5 && !isDriving && "opacity-40 grayscale pointer-events-none"
                 )}
               >
                 {isDriving ? (
-                  <div key="driving-active" className="flex items-center gap-3 font-medium">
+                  <div key="driving-active" className="flex items-center gap-3 font-bold">
                     {isDragModule ? <Loader2 className="w-5 h-5 animate-spin" /> : <Square className="w-5 h-5 fill-current" />}
                     <span className="font-bold">{isDragModule ? "RECORDING" : "NDALO UDHËTIMIN"}</span>
                   </div>
                 ) : (
-                  <div key="driving-inactive" className="flex items-center gap-3 font-medium">
+                  <div key="driving-inactive" className="flex items-center gap-3 font-bold">
                     {isDragModule ? <Zap className="w-6 h-6 fill-current" /> : <Navigation className="w-6 h-6 fill-current" />}
                     <span className="font-bold">{isDragModule ? "NIS GARËN" : "FILLO UDHËTIMIN"}</span>
                   </div>
@@ -481,7 +481,7 @@ export default function DashboardPage() {
                 <Button 
                   variant="outline" 
                   onClick={resetTrip} 
-                  className="w-full h-14 rounded-2xl font-medium text-[10px] uppercase border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all border-b-4 border-b-white/5 active:translate-y-0.5 active:border-b-0"
+                  className="w-full h-14 rounded-2xl font-bold text-[10px] uppercase border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all border-b-4 border-b-white/5 active:translate-y-0.5 active:border-b-0"
                 >
                   <RotateCcw className="w-4 h-4 mr-2" /> Reseto Statistikat
                 </Button>
@@ -494,27 +494,27 @@ export default function DashboardPage() {
                   <>
                     <Card className="bg-yellow-500/5 border border-white/5 p-4 rounded-[1.8rem] flex flex-col items-center backdrop-blur-md">
                       <Timer className="w-4 h-4 text-yellow-500 mb-1.5" />
-                      <span className="text-[14px] font-medium text-yellow-500">{(dragTime || 0).toFixed(2)}s</span>
+                      <span className="text-[14px] font-bold text-yellow-500">{(dragTime || 0).toFixed(2)}s</span>
                     </Card>
                     <Card className="bg-yellow-500/5 border border-white/5 p-4 rounded-[1.8rem] flex flex-col items-center backdrop-blur-md">
                       <MapPin className="w-4 h-4 text-yellow-500 mb-1.5" />
-                      <span className="text-[14px] font-medium text-white">{Math.round(tripDistance)}m</span>
+                      <span className="text-[14px] font-bold text-white">{Math.round(tripDistance)}m</span>
                     </Card>
                     <Card className="bg-yellow-500/5 border border-white/5 p-4 rounded-[1.8rem] flex flex-col items-center backdrop-blur-md">
                       <Gauge className="w-4 h-4 text-yellow-500 mb-1.5" />
-                      <span className="text-[14px] font-medium text-white">{Math.round(peakSpeed)}</span>
+                      <span className="text-[14px] font-bold text-white">{Math.round(peakSpeed)}</span>
                     </Card>
                   </>
                 ) : (
                   <>
                     <Card className="bg-accent/5 border border-white/5 p-4 rounded-[1.8rem] flex flex-col items-center backdrop-blur-md">
-                      <TrendingUp className="w-4 h-4 text-accent mb-1.5" /><span className="text-[14px] font-medium text-white">{Math.round((tripDistance / Math.max(tripTime, 1)) * 3.6) || 0} <span className="text-[8px] opacity-40">KM/H</span></span>
+                      <TrendingUp className="w-4 h-4 text-accent mb-1.5" /><span className="text-[14px] font-bold text-white">{Math.round((tripDistance / Math.max(tripTime, 1)) * 3.6) || 0} <span className="text-[8px] opacity-40">KM/H</span></span>
                     </Card>
                     <Card className="bg-accent/5 border border-white/5 p-4 rounded-[1.8rem] flex flex-col items-center backdrop-blur-md">
-                      <Gauge className="w-4 h-4 text-accent mb-1.5" /><span className="text-[14px] font-medium text-white">{Math.round(peakSpeed)}</span>
+                      <Gauge className="w-4 h-4 text-accent mb-1.5" /><span className="text-[14px] font-bold text-white">{Math.round(peakSpeed)}</span>
                     </Card>
                     <Card className="bg-accent/5 border border-white/5 p-4 rounded-[1.8rem] flex flex-col items-center backdrop-blur-md">
-                      <MapPin className="w-4 h-4 text-accent mb-1.5" /><span className="text-[14px] font-medium text-white">{(tripDistance / 1000).toFixed(2)} <span className="text-[8px] opacity-40">KM</span></span>
+                      <MapPin className="w-4 h-4 text-accent mb-1.5" /><span className="text-[14px] font-bold text-white">{(tripDistance / 1000).toFixed(2)} <span className="text-[8px] opacity-40">KM</span></span>
                     </Card>
                   </>
                 )}
@@ -690,4 +690,3 @@ function descArc(x: number, y: number, radius: number, startAngle: number, endAn
   ].join(" ");
   return d;
 }
-
