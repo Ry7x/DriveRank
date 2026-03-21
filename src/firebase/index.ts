@@ -6,7 +6,7 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore'
 
 /**
- * Inicializon Firebase SDKs duke garantuar që konfigurimi të ofrohet gjithmonë.
+ * Inicializon Firebase SDK duke garantuar që konfigurimi të ofrohet gjithmonë.
  * Kjo parandalon gabimin 'app/no-options' në mjedise si Vercel.
  */
 export function initializeFirebase() {
@@ -16,7 +16,7 @@ export function initializeFirebase() {
   if (apps.length > 0) {
     firebaseApp = getApp();
   } else {
-    // Gjithmonë kalohet objekti i konfigurimit për siguri maksimale në mjediset e Build si Vercel
+    // Gjithmonë kalohet objekti i konfigurimit për siguri maksimale në mjedise si Vercel
     firebaseApp = initializeApp(firebaseConfig);
   }
 
