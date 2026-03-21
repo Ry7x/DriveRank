@@ -16,7 +16,7 @@ export function initializeFirebase() {
   if (apps.length > 0) {
     firebaseApp = getApp();
   } else {
-    // Gjithmonë kalohet objekti i konfigurimit për siguri maksimale
+    // Gjithmonë kalohet objekti i konfigurimit për siguri maksimale në mjedise si Vercel
     firebaseApp = initializeApp(firebaseConfig);
   }
 
