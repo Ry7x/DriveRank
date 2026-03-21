@@ -1,4 +1,3 @@
-
 'use client';
 
 import { firebaseConfig } from '@/firebase/config';
@@ -17,7 +16,7 @@ export function initializeFirebase() {
   if (apps.length > 0) {
     firebaseApp = getApp();
   } else {
-    // Gjithmonë kalohet objekti i konfigurimit për siguri maksimale në Build
+    // Gjithmonë kalohet objekti i konfigurimit për siguri maksimale në mjediset e Build si Vercel
     firebaseApp = initializeApp(firebaseConfig);
   }
 
