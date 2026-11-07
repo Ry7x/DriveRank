@@ -64,15 +64,10 @@
   "devDependencies": {
     "@types/leaflet": "^1.9.12",
     "@types/node": "^20",
-<<<<<<< HEAD
     "@types/react": "^19.2.1",
     "@types/react-dom": "^19.2.1",
     "autoprefixer": "^10.4.27",
     "cross-env": "^10.1.0",
-=======
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
->>>>>>> 8a2235548925ae5db73b9e996195cdfbb76640c3
     "genkit-cli": "^1.28.0",
     "typescript": "^5"
   }
