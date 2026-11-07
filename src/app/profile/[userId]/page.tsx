@@ -39,7 +39,7 @@ export default function ProfileViewPage({
 }) {
   const { userId: targetUserId } = use(params);
   const router = useRouter();
-  const { user: currentUser } = useUser();
+  const { user: currentUser, isUserLoading } = useUser();
   const auth = useAuth();
   const isOwnProfile = currentUser?.uid === targetUserId;
   const db = useFirestore();
@@ -58,20 +58,24 @@ export default function ProfileViewPage({
     profileIcon: "speedometer" as CarIconType,
   });
 
+  // Wait for auth before reading: rules only allow signed-in reads, and querying
+  // during auth restore is what caused "Missing permissions" on refresh.
+  const authReady = !isUserLoading && !!currentUser;
+
   const profileRef = useMemoFirebase(() => {
-    if (!targetUserId || !db) return null;
+    if (!targetUserId || !db || !authReady) return null;
     return doc(db, "users", targetUserId);
-  }, [targetUserId, db]);
+  }, [targetUserId, db, authReady]);
 
   const { data: profile, isLoading: isProfileLoading } = useDoc(profileRef);
 
   const runsQuery = useMemoFirebase(() => {
-    if (!targetUserId || !db) return null;
+    if (!targetUserId || !db || !authReady) return null;
     return query(
       collection(db, "users", targetUserId, "runs"),
       orderBy("createdAt", "desc")
     );
-  }, [targetUserId, db]);
+  }, [targetUserId, db, authReady]);
 
   const { data: runs } = useCollection(runsQuery);
 
@@ -149,7 +153,7 @@ export default function ProfileViewPage({
     router.replace("/");
   };
 
-  if (isProfileLoading) return <div className="min-h-screen bg-black flex items-center justify-center"><Loader2 className="w-10 h-10 text-accent animate-spin" /></div>;
+  if (isUserLoading || isProfileLoading) return <div className="min-h-screen bg-black flex items-center justify-center"><Loader2 className="w-10 h-10 text-accent animate-spin" /></div>;
 
   if (!profile) return (
     <div className="flex flex-col h-full w-full bg-background items-center justify-center p-10 text-center apple-slide-up">

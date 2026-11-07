@@ -12,15 +12,39 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
 
+    // Only the founder account may carry isAdmin (keep in sync with ADMIN_EMAIL in src/app/page.tsx).
+    function isAdminAccount() {
+      return request.auth.token.email == 'admin@gmail.com';
+    }
+
+    // Blocks users from granting themselves the FOUNDER badge on any document.
+    function noFakeAdmin(data) {
+      return data.get('isAdmin', false) != true || isAdminAccount();
+    }
+
+    // Profile writes may not grant isAdmin / isPremium; existing values are preserved.
+    function validProfileCreate() {
+      return noFakeAdmin(request.resource.data)
+        && (request.resource.data.get('isPremium', false) != true || isAdminAccount());
+    }
+    function validProfileUpdate() {
+      return (request.resource.data.get('isAdmin', false) == resource.data.get('isAdmin', false)
+              || noFakeAdmin(request.resource.data))
+        && (request.resource.data.get('isPremium', false) == resource.data.get('isPremium', false)
+            || isAdminAccount());
+    }
+
     // Rekordet publike të garave (Ranking)
     match /public_runs/{runId} {
-<<<<<<< HEAD
       allow get, list: if signedIn();
-=======
-      allow get, list: if true; // Lejojmë leximin publik për ranking
->>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
-      allow create: if signedIn() && request.auth.uid == request.resource.data.userId;
-      allow update, delete: if signedIn() && request.auth.uid == resource.data.userId;
+      allow create: if signedIn()
+        && request.auth.uid == request.resource.data.userId
+        && noFakeAdmin(request.resource.data);
+      allow update: if signedIn()
+        && request.auth.uid == resource.data.userId
+        && request.resource.data.userId == resource.data.userId
+        && noFakeAdmin(request.resource.data);
+      allow delete: if signedIn() && request.auth.uid == resource.data.userId;
     }
 
     // Përmbledhje të lehta të garave për ranking (pa telemetri / GPS path).
@@ -36,39 +60,32 @@ service cloud.firestore {
       allow get, list: if signedIn();
       allow create: if signedIn()
         && request.auth.uid == request.resource.data.userId
-        && isSlimSummary(request.resource.data);
+        && isSlimSummary(request.resource.data)
+        && noFakeAdmin(request.resource.data);
       allow update: if signedIn()
         && request.auth.uid == resource.data.userId
         && request.resource.data.userId == resource.data.userId
-        && isSlimSummary(request.resource.data);
+        && isSlimSummary(request.resource.data)
+        && noFakeAdmin(request.resource.data);
       allow delete: if signedIn() && request.auth.uid == resource.data.userId;
     }
 
     // Profilet e përdoruesve dhe garat e tyre
     match /users/{userId} {
-<<<<<<< HEAD
       allow read: if signedIn();
-      allow write: if isOwner(userId);
+      allow create: if isOwner(userId) && validProfileCreate();
+      allow update: if isOwner(userId) && validProfileUpdate();
+      allow delete: if isOwner(userId);
 
       match /runs/{runId} {
         allow get, list: if signedIn();
-=======
-      // Lejojmë leximin publik për profilet pasi është aplikacion ranking
-      // Kjo zgjidh edhe gabimin "Missing permissions" gjatë refresh-it
-      allow read: if true; 
-      allow write: if isOwner(userId);
-
-      match /runs/{runId} {
-        allow get, list: if true; // Lejojmë leximin publik për telemetrinë e vrapimeve
->>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
-        allow create: if isOwner(userId);
-        allow update, delete: if isOwner(userId);
+        allow create, update: if isOwner(userId) && noFakeAdmin(request.resource.data);
+        allow delete: if isOwner(userId);
       }
     }
 
     // Raportet e komunitetit për radarë
     match /radar_reports/{reportId} {
-<<<<<<< HEAD
       allow get, list: if signedIn();
       allow create: if signedIn();
       allow update: if signedIn() && resource.data.userId == request.auth.uid;
@@ -77,16 +94,6 @@ service cloud.firestore {
       );
     }
     
-    // Versioni i rregullave: 21.0 - Emoji Update dhe Siguri Mobile e Plotë
-=======
-      allow get, list: if true; // Lejojmë të gjithëve t'i shohin radarët për siguri në rrugë
-      allow create: if signedIn();
-      allow update: if signedIn() && resource.data.userId == request.auth.uid;
-      // Lejojmë fshirjen për çdo përdorues të kyçur për të mundësuar pastrimin e komunitetit
-      allow delete: if signedIn();
-    }
-    
-    // Versioni i rregullave: 21.2 - Public Read for User Profiles (Fix for Auth race condition)
->>>>>>> 93e76c937e556404d8b9e57cec4c82eed870418d
+    // Versioni i rregullave: 22.0 - run_summaries për ranking; leximi vetëm për përdorues të kyçur
   }
 }

@@ -28,7 +28,12 @@ export default function GhostRacePage({
   const [elapsed, setElapsed] = useState(0);
   const [mounted, setMounted] = useState(false);
   
-  const ghostRef = useMemoFirebase(() => (db ? doc(db, "public_runs", runId as string) : null), [db, runId]);
+  const { user, isUserLoading } = useUser();
+  // Wait for auth: public_runs are readable by signed-in users only.
+  const ghostRef = useMemoFirebase(
+    () => (db && user && !isUserLoading ? doc(db, "public_runs", runId as string) : null),
+    [db, runId, user, isUserLoading]
+  );
   const { data: ghostRun, isLoading: isGhostLoading } = useDoc(ghostRef);
 
   const lastPos = useRef<{ lat: number; lng: number; timestamp: number } | null>(null);
@@ -87,7 +92,7 @@ export default function GhostRacePage({
     };
   }, [ghostRun, elapsed, distance, isRacing]);
 
-  if (isGhostLoading || !mounted) {
+  if (isUserLoading || isGhostLoading || !mounted) {
     return (
       <div className="min-h-screen bg-black flex flex-col items-center justify-center">
         <div className="relative w-20 h-20 mb-6">
