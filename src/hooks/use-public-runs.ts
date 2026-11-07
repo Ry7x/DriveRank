@@ -2,8 +2,12 @@
 
 import { collection, limit, orderBy, query, where } from "firebase/firestore";
 import { useCollection, useFirestore, useMemoFirebase, useUser } from "@/firebase";
+import { RUN_SUMMARIES } from "@/lib/runs";
 
-/** Live subscription to public runs created since `sinceIso` (newest first). */
+/**
+ * Live subscription to ranking summaries created since `sinceIso` (newest first).
+ * Reads `run_summaries`, not `public_runs`, so no telemetry/GPS paths are downloaded.
+ */
 export function usePublicRuns(sinceIso: string) {
   const { user, isUserLoading } = useUser();
   const db = useFirestore();
@@ -11,7 +15,7 @@ export function usePublicRuns(sinceIso: string) {
   const runsQuery = useMemoFirebase(() => {
     if (!db || isUserLoading || !user?.uid) return null;
     return query(
-      collection(db, "public_runs"),
+      collection(db, RUN_SUMMARIES),
       where("createdAt", ">=", sinceIso),
       orderBy("createdAt", "desc"),
       limit(1000)

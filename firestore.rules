@@ -23,6 +23,27 @@ service cloud.firestore {
       allow update, delete: if signedIn() && request.auth.uid == resource.data.userId;
     }
 
+    // Përmbledhje të lehta të garave për ranking (pa telemetri / GPS path).
+    // Same id as the matching public_runs doc. Field list mirrors SUMMARY_FIELDS in src/lib/runs.ts.
+    function isSlimSummary(data) {
+      return data.keys().hasOnly([
+        'userId', 'username', 'community', 'profileIcon', 'isAdmin', 'city',
+        'carBrand', 'carModel', 'runType', 'dragTime', 'peakSpeedKmH', 'createdAt'
+      ]);
+    }
+
+    match /run_summaries/{runId} {
+      allow get, list: if signedIn();
+      allow create: if signedIn()
+        && request.auth.uid == request.resource.data.userId
+        && isSlimSummary(request.resource.data);
+      allow update: if signedIn()
+        && request.auth.uid == resource.data.userId
+        && request.resource.data.userId == resource.data.userId
+        && isSlimSummary(request.resource.data);
+      allow delete: if signedIn() && request.auth.uid == resource.data.userId;
+    }
+
     // Profilet e përdoruesve dhe garat e tyre
     match /users/{userId} {
 <<<<<<< HEAD

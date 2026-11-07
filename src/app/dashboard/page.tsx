@@ -17,7 +17,8 @@ import {
   Loader2, Timer, Trophy, RotateCcw, Gauge, Zap, Square, MapPin, Star, ChevronRight, X, Activity, Signal, SignalHigh, SignalLow, Play, AlertCircle, ShieldAlert, Radio, Navigation, CircleSlash, RefreshCcw, TrendingUp, ArrowDown, InfoIcon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useUser, useDoc, useFirestore, useMemoFirebase, addDocumentNonBlocking, useCollection, updateDocumentNonBlocking } from "@/firebase";
+import { RUN_SUMMARIES, saveRun } from "@/lib/runs";
+import { useUser, useDoc, useFirestore, useMemoFirebase, useCollection, updateDocumentNonBlocking } from "@/firebase";
 import { doc, collection, query, limit, where, orderBy } from "firebase/firestore";
 import { subDays, subHours } from "date-fns";
 import { useDriving, RunMode } from "@/context/driving-context";
@@ -109,8 +110,10 @@ export default function DashboardPage() {
   const publicRunsQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
     return query(
-      collection(db, "public_runs"), 
+      // Slim summaries only — rank lookups don't need telemetry/GPS paths.
+      collection(db, RUN_SUMMARIES),
       where("createdAt", ">=", fiveDaysAgo),
+      orderBy("createdAt", "desc"),
       limit(1000)
     );
   }, [db, user, fiveDaysAgo]);
@@ -227,8 +230,7 @@ export default function DashboardPage() {
               distanceMeters: lastRunSummary.distance,
               durationSeconds: time,
             };
-            addDocumentNonBlocking(collection(db, "public_runs"), runData);
-            addDocumentNonBlocking(collection(db, "users", user.uid, "runs"), runData);
+            saveRun(db, user.uid, runData);
 
             const pbKey = type === '0-60' ? 'best_0_60' :
                           type === '0-100' ? 'best_0_100' :
@@ -249,8 +251,7 @@ export default function DashboardPage() {
           distanceMeters: lastRunSummary.distance,
           durationSeconds: lastRunSummary.time,
         };
-        addDocumentNonBlocking(collection(db, "public_runs"), runData);
-        addDocumentNonBlocking(collection(db, "users", user.uid, "runs"), runData);
+        saveRun(db, user.uid, runData);
 
         const runType = lastRunSummary.runType;
         const pbKey = runType === '0-60' ? 'best_0_60' :

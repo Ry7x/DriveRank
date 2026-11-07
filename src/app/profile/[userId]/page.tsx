@@ -29,6 +29,7 @@ import { doc, collection, query, orderBy, getDocs, where } from "firebase/firest
 import { signOut } from "firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { PROFILE_SYNC_FIELDS, RUN_SUMMARIES } from "@/lib/runs";
 import { RenderCarIcon, CarIconType, CarIconConfig } from "@/components/icons/car-icons";
 
 export default function ProfileViewPage({ 
@@ -123,33 +124,18 @@ export default function ProfileViewPage({
 
     // 2. Sync changes with all Ranking (public_runs) and Personal History
     try {
-      // Update Public Ranking Documents
-      const publicRunsQ = query(collection(db, "public_runs"), where("userId", "==", targetUserId));
-      const publicSnapshot = await getDocs(publicRunsQ);
-      
-      publicSnapshot.forEach((docSnap) => {
-        updateDocumentNonBlocking(docSnap.ref, {
-          username: formData.username,
-          community: formData.community,
-          profileIcon: formData.profileIcon,
-          carBrand: formData.carBrand,
-          carModel: formData.carModel
-        });
-      });
+      const synced = Object.fromEntries(PROFILE_SYNC_FIELDS.map((k) => [k, (formData as any)[k]]));
 
-      // Update User Subcollection History for Consistency
-      const personalRunsQ = query(collection(db, "users", targetUserId, "runs"));
-      const personalSnapshot = await getDocs(personalRunsQ);
-      
-      personalSnapshot.forEach((docSnap) => {
-        updateDocumentNonBlocking(docSnap.ref, {
-          username: formData.username,
-          community: formData.community,
-          profileIcon: formData.profileIcon,
-          carBrand: formData.carBrand,
-          carModel: formData.carModel
-        });
-      });
+      // Update public ranking docs + their slim summaries (same ids) and personal history.
+      const [publicSnapshot, summarySnapshot, personalSnapshot] = await Promise.all([
+        getDocs(query(collection(db, "public_runs"), where("userId", "==", targetUserId))),
+        getDocs(query(collection(db, RUN_SUMMARIES), where("userId", "==", targetUserId))),
+        getDocs(query(collection(db, "users", targetUserId, "runs"))),
+      ]);
+
+      for (const snap of [publicSnapshot, summarySnapshot, personalSnapshot]) {
+        snap.forEach((docSnap) => updateDocumentNonBlocking(docSnap.ref, synced));
+      }
     } catch (e) {
       console.error("Sync failed:", e);
     }
