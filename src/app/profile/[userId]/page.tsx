@@ -29,6 +29,7 @@ import { doc, collection, query, orderBy, getDocs, where } from "firebase/firest
 import { signOut } from "firebase/auth";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { PROFILE_SYNC_FIELDS, RUN_SUMMARIES } from "@/lib/runs";
 import { RenderCarIcon, CarIconType, CarIconConfig } from "@/components/icons/car-icons";
 
 export default function ProfileViewPage({ 
@@ -38,7 +39,7 @@ export default function ProfileViewPage({
 }) {
   const { userId: targetUserId } = use(params);
   const router = useRouter();
-  const { user: currentUser } = useUser();
+  const { user: currentUser, isUserLoading } = useUser();
   const auth = useAuth();
   const isOwnProfile = currentUser?.uid === targetUserId;
   const db = useFirestore();
@@ -57,20 +58,24 @@ export default function ProfileViewPage({
     profileIcon: "speedometer" as CarIconType,
   });
 
+  // Wait for auth before reading: rules only allow signed-in reads, and querying
+  // during auth restore is what caused "Missing permissions" on refresh.
+  const authReady = !isUserLoading && !!currentUser;
+
   const profileRef = useMemoFirebase(() => {
-    if (!targetUserId || !db) return null;
+    if (!targetUserId || !db || !authReady) return null;
     return doc(db, "users", targetUserId);
-  }, [targetUserId, db]);
+  }, [targetUserId, db, authReady]);
 
   const { data: profile, isLoading: isProfileLoading } = useDoc(profileRef);
 
   const runsQuery = useMemoFirebase(() => {
-    if (!targetUserId || !db) return null;
+    if (!targetUserId || !db || !authReady) return null;
     return query(
       collection(db, "users", targetUserId, "runs"),
       orderBy("createdAt", "desc")
     );
-  }, [targetUserId, db]);
+  }, [targetUserId, db, authReady]);
 
   const { data: runs } = useCollection(runsQuery);
 
@@ -123,33 +128,18 @@ export default function ProfileViewPage({
 
     // 2. Sync changes with all Ranking (public_runs) and Personal History
     try {
-      // Update Public Ranking Documents
-      const publicRunsQ = query(collection(db, "public_runs"), where("userId", "==", targetUserId));
-      const publicSnapshot = await getDocs(publicRunsQ);
-      
-      publicSnapshot.forEach((docSnap) => {
-        updateDocumentNonBlocking(docSnap.ref, {
-          username: formData.username,
-          community: formData.community,
-          profileIcon: formData.profileIcon,
-          carBrand: formData.carBrand,
-          carModel: formData.carModel
-        });
-      });
+      const synced = Object.fromEntries(PROFILE_SYNC_FIELDS.map((k) => [k, (formData as any)[k]]));
 
-      // Update User Subcollection History for Consistency
-      const personalRunsQ = query(collection(db, "users", targetUserId, "runs"));
-      const personalSnapshot = await getDocs(personalRunsQ);
-      
-      personalSnapshot.forEach((docSnap) => {
-        updateDocumentNonBlocking(docSnap.ref, {
-          username: formData.username,
-          community: formData.community,
-          profileIcon: formData.profileIcon,
-          carBrand: formData.carBrand,
-          carModel: formData.carModel
-        });
-      });
+      // Update public ranking docs + their slim summaries (same ids) and personal history.
+      const [publicSnapshot, summarySnapshot, personalSnapshot] = await Promise.all([
+        getDocs(query(collection(db, "public_runs"), where("userId", "==", targetUserId))),
+        getDocs(query(collection(db, RUN_SUMMARIES), where("userId", "==", targetUserId))),
+        getDocs(query(collection(db, "users", targetUserId, "runs"))),
+      ]);
+
+      for (const snap of [publicSnapshot, summarySnapshot, personalSnapshot]) {
+        snap.forEach((docSnap) => updateDocumentNonBlocking(docSnap.ref, synced));
+      }
     } catch (e) {
       console.error("Sync failed:", e);
     }
@@ -163,7 +153,7 @@ export default function ProfileViewPage({
     router.replace("/");
   };
 
-  if (isProfileLoading) return <div className="min-h-screen bg-black flex items-center justify-center"><Loader2 className="w-10 h-10 text-accent animate-spin" /></div>;
+  if (isUserLoading || isProfileLoading) return <div className="min-h-screen bg-black flex items-center justify-center"><Loader2 className="w-10 h-10 text-accent animate-spin" /></div>;
 
   if (!profile) return (
     <div className="flex flex-col h-full w-full bg-background items-center justify-center p-10 text-center apple-slide-up">

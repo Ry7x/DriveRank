@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-@import "leaflet/dist/leaflet.css";
-
-=======
->>>>>>> 8a2235548925ae5db73b9e996195cdfbb76640c3
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -75,11 +70,12 @@
     max-height: 100dvh;
   }
   
+  /* `both` keeps elements hidden during their stagger delay instead of flashing in. */
   .apple-slide-up {
-    animation: apple-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: apple-slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   .apple-scale-in {
-    animation: apple-scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: apple-scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
   
   .stagger-1 { animation-delay: 0.05s; }
@@ -87,6 +83,9 @@
   .stagger-3 { animation-delay: 0.15s; }
   .stagger-4 { animation-delay: 0.2s; }
   .stagger-5 { animation-delay: 0.25s; }
+  .stagger-6 { animation-delay: 0.3s; }
+  .stagger-7 { animation-delay: 0.35s; }
+  .stagger-8 { animation-delay: 0.4s; }
 
   @keyframes apple-slide-up {
     from { opacity: 0; transform: translateY(10px); }
@@ -190,4 +189,15 @@
 
 .animate-draw-route {
   animation: draw-route 4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apple-slide-up,
+  .apple-scale-in,
+  .animate-text-red-purple,
+  .animate-text-yellow-cyan,
+  .animate-text-blue-grey,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
 }

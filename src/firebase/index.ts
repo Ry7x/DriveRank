@@ -3,7 +3,13 @@
 import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import {
+  Firestore,
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 
 /**
  * Inicializon Firebase SDK duke përdorur gjithmonë objektin e konfigurimit.
@@ -23,8 +29,26 @@ export function initializeFirebase() {
   return {
     firebaseApp,
     auth: getAuth(firebaseApp),
-    firestore: getFirestore(firebaseApp)
+    firestore: getCachedFirestore(firebaseApp)
   };
+}
+
+/**
+ * Firestore with an IndexedDB cache: listeners render cached data instantly and,
+ * when re-subscribing (e.g. switching between ranking tabs), only changed documents
+ * are downloaded instead of the whole result set.
+ * Falls back to the default in-memory cache on the server, when IndexedDB is
+ * unavailable, or when Firestore was already initialised (hot reload).
+ */
+function getCachedFirestore(app: FirebaseApp): Firestore {
+  if (typeof window === 'undefined') return getFirestore(app);
+  try {
+    return initializeFirestore(app, {
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+    });
+  } catch {
+    return getFirestore(app);
+  }
 }
 
 export * from './provider';
